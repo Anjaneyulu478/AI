@@ -1,0 +1,41 @@
+from itertools import permutations
+
+def travelling_salesman(graph, start):
+    # List of vertices except the start
+    vertices = list(graph.keys())
+    vertices.remove(start)
+
+    min_path = None
+    min_cost = float('inf')
+
+    # Try every possible order of visiting cities
+    for perm in permutations(vertices):
+        path = [start] + list(perm) + [start]
+        cost = 0
+        for i in range(len(path)-1):
+            cost += graph[path[i]][path[i+1]]
+        if cost < min_cost:
+            min_cost = cost
+            min_path = path
+
+    return min_path, min_cost
+
+
+# Example Graph (Adjacency Matrix as Dict of Dicts)
+graph = {
+    'A': {'A': 0, 'B': 10, 'C': 15, 'D': 20},
+    'B': {'A': 10, 'B': 0, 'C': 35, 'D': 25},
+    'C': {'A': 15, 'B': 35, 'C': 0, 'D': 30},
+    'D': {'A': 20, 'B': 25, 'C': 30, 'D': 0}
+}
+
+# Run TSP
+start_city = 'A'
+path, cost = travelling_salesman(graph, start_city)
+print("Optimal Path:", " -> ".join(path))
+print("Minimum Cost:", cost)
+
+ output :
+
+Optimal Path: A -> B -> D -> C -> A
+Minimum Cost: 80
