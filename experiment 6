@@ -1,0 +1,40 @@
+# Vacuum Cleaner Problem Simulation
+
+def vacuum_cleaner(world, start):
+    """
+    world: dict with states {'A': 'Dirty'/'Clean', 'B': 'Dirty'/'Clean'}
+    start: 'A' or 'B' (starting location of vacuum cleaner)
+    """
+    location = start
+    print("Initial World State:", world, "Vacuum at:", location)
+
+    # Run until both rooms are clean
+    while world['A'] == 'Dirty' or world['B'] == 'Dirty':
+        if world[location] == 'Dirty':
+            print(f"Location {location} is Dirty → Cleaning...")
+            world[location] = 'Clean'
+        else:
+            print(f"Location {location} is already Clean.")
+
+        # Move to the other room
+        location = 'B' if location == 'A' else 'A'
+        print("Moving to", location)
+
+    print("\nFinal World State:", world, "Vacuum at:", location)
+    print("All rooms are clean!")
+
+
+# Example Run
+world_state = {'A': 'Dirty', 'B': 'Dirty'}
+vacuum_cleaner(world_state, 'A')
+
+output:
+
+Initial World State: {'A': 'Dirty', 'B': 'Dirty'} Vacuum at: A
+Location A is Dirty → Cleaning...
+Moving to B
+Location B is Dirty → Cleaning...
+Moving to A
+
+Final World State: {'A': 'Clean', 'B': 'Clean'} Vacuum at: A
+All rooms are clean!
