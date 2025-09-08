@@ -1,0 +1,61 @@
+import heapq
+
+def a_star(graph, start, goal, heuristic):
+    # Priority queue for open nodes (f, g, node, path)
+    open_list = []
+    heapq.heappush(open_list, (0, 0, start, [start]))
+
+    closed_set = set()
+
+    while open_list:
+        f, g, node, path = heapq.heappop(open_list)
+
+        if node == goal:
+            return path, g  # Found goal: return path and cost
+
+        if node in closed_set:
+            continue
+        closed_set.add(node)
+
+        for neighbor, cost in graph[node].items():
+            if neighbor not in closed_set:
+                g_new = g + cost
+                f_new = g_new + heuristic[neighbor]
+                heapq.heappush(open_list, (f_new, g_new, neighbor, path + [neighbor]))
+
+    return None, float('inf')
+
+
+# Example Graph (Adjacency List with Costs)
+graph = {
+    'A': {'B': 1, 'C': 3},
+    'B': {'A': 1, 'D': 1, 'E': 5},
+    'C': {'A': 3, 'F': 2},
+    'D': {'B': 1},
+    'E': {'B': 5, 'F': 1, 'G': 2},
+    'F': {'C': 2, 'E': 1, 'G': 3},
+    'G': {'E': 2, 'F': 3}
+}
+
+# Heuristic values (straight-line estimates to goal 'G')
+heuristic = {
+    'A': 7,
+    'B': 6,
+    'C': 4,
+    'D': 5,
+    'E': 2,
+    'F': 1,
+    'G': 0
+}
+
+# Run A*
+start_node = 'A'
+goal_node = 'G'
+path, cost = a_star(graph, start_node, goal_node, heuristic)
+
+print("Optimal Path:", " -> ".join(path))
+print("Total Cost:", cost)
+
+output :
+Optimal Path: A -> B -> D -> E -> G
+Total Cost: 5
